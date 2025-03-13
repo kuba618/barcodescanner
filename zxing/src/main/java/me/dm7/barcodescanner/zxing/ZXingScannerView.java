@@ -63,7 +63,7 @@ public class ZXingScannerView extends BarcodeScannerView {
 
     public ZXingScannerView(Context context) {
         super(context);
-        initMultiFormatReader();
+        initMultiFormatReaderWithTryHarder();
     }
 
     public ZXingScannerView(Context context, AttributeSet attributeSet) {
@@ -86,7 +86,15 @@ public class ZXingScannerView extends BarcodeScannerView {
         }
         return mFormats;
     }
-
+    
+    private void initMultiFormatReaderWithTryHarder() {
+        Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, getFormats());
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        mMultiFormatReader = new MultiFormatReader();
+        mMultiFormatReader.setHints(hints);
+    }
+    
     private void initMultiFormatReader() {
         Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
         hints.put(DecodeHintType.POSSIBLE_FORMATS, getFormats());
